@@ -3,7 +3,7 @@ import { Text, Flex, Box, Image } from "rebass"
 
 import Modal from "../../../../components/modal"
 import Button from "../../../../components/button"
-import Input from "../../../../components/molecules/input"
+import Input from "../../../../components/input"
 import Dot from "../../../../components/dot"
 import Pill from "../../../../components/pill"
 import { useForm } from "react-hook-form"
@@ -103,11 +103,7 @@ const ItemModal = ({ region, draftOrderId, item = {}, refresh, dismiss }) => {
               </Text>
               <StyledSwitch
                 checked={!addCustom}
-                onClick={() => {
-                  setAddCustom(!addCustom)
-                  // prevent UI flickering
-                  setSelected(null)
-                }}
+                onClick={() => setAddCustom(!addCustom)}
               />
               <Text ml={2} fontSize={0}>
                 Existing
@@ -165,19 +161,17 @@ const ItemModal = ({ region, draftOrderId, item = {}, refresh, dismiss }) => {
               </Flex>
             </>
           ) : selected === null ? (
-            <Flex
-              justifyContent="flex-start"
-              sx={{ minWidth: 30, minHeight: 30 }}
-            >
+            <Flex justifyContent="flex-start" width="100%">
               <Dropdown
                 disabled={!region}
                 showSearch
-                placement="bottom"
+                leftAlign={true}
                 onSearchChange={handleProductSearch}
-                dropdownHeight={180}
+                dropdownWidth="100% !important"
+                dropdownHeight="180px !important"
                 searchPlaceholder={"Search by SKU, Name, etc."}
                 showTrigger={false}
-                topPlacement={-20}
+                topPlacement="-50px"
               >
                 {searchResults.map(s => (
                   <Flex
@@ -278,7 +272,11 @@ const ItemModal = ({ region, draftOrderId, item = {}, refresh, dismiss }) => {
                   <CurrencyInput
                     edit={false}
                     required={true}
-                    value={extractUnitPrice(selected, region, false) / 100}
+                    value={
+                      price !== null
+                        ? price
+                        : extractUnitPrice(selected.prices, region, false)
+                    }
                     currency={region.currency_code}
                     onChange={({ currentTarget }) =>
                       setPrice(currentTarget.value)

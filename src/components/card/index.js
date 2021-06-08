@@ -61,18 +61,17 @@ Card.Header = ({
           </Badge>
         )}
       </Flex>
-      {!!action &&
-        action.map(a => (
-          <Button
-            loading={a.isLoading}
-            onClick={a.onClick}
-            disabled={a.disabled}
-            mr={3}
-            variant={a.type || "cta"}
-          >
-            {a.label}
-          </Button>
-        ))}
+      {!!action && (
+        <Button
+          loading={action.isLoading}
+          onClick={action.onClick}
+          disabled={action.disabled}
+          mr={3}
+          variant={action.type || "cta"}
+        >
+          {action.label}
+        </Button>
+      )}
       {dropdownOptions && dropdownOptions.length > 0 && (
         <Dropdown mr={3}>
           {dropdownOptions.map(o => (
