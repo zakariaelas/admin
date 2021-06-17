@@ -8,8 +8,10 @@ import ReactTooltip from "react-tooltip"
 import { ReactComponent as Clipboard } from "../../../../assets/svg/clipboard.svg"
 import { decideBadgeColor } from "../../../../utils/decide-badge-color"
 import Typography from "../../../../components/typography"
-import Badge from "../../../../components/fundamentals/badge"
-import LineItem from "../line-item"
+import Badge from "../../../../components/badge"
+import { ReactComponent as Silent} from "../../../../assets/svg/silent.svg"
+import { ReactComponent as Notification} from "../../../../assets/svg/notification.svg"
+import Button from "../../../../components/button"
 import Dropdown from "../../../../components/dropdown"
 import useMedusa from "../../../../hooks/use-medusa"
 import CopyToClipboard from "../../../../components/copy-to-clipboard"
@@ -162,48 +164,73 @@ export default ({
                   <Text mr={2} fontSize={1} color={fontColor}>
                     Return Status
                   </Text>
-                  <Badge
-                    mr={4}
-                    color={returnStatusColors.color}
-                    bg={returnStatusColors.bgColor}
-                  >
-                    {event.raw.return_order.status}
-                  </Badge>
-                  <Text mr={2} fontSize={1} color={fontColor}>
-                    Fulfillment Status
-                  </Text>
-                  <Badge
-                    color={fulfillStatusColors.color}
-                    bg={fulfillStatusColors.bgColor}
-                  >
-                    {event.raw.fulfillment_status}
-                  </Badge>
-                </Flex>
-              </>
-            )}
-          </Flex>
-          <Flex>
-            <SwapDetails
-              event={event}
-              order={order}
-              paymentLink={paymentLink}
-              onReceiveReturn={onReceiveReturn}
-              onFulfillSwap={onFulfillSwap}
-              swapId={event.raw.id}
-              onProcessPayment={onProcessPayment}
-            />
-            {actions.length > 0 && (
-              <Flex ml={2}>
-                <Dropdown>
-                  {actions.map(o => (
-                    <Text color={o.variant} onClick={o.onClick}>
-                      {o.label}
-                    </Text>
-                  ))}
-                </Dropdown>
+                )}
+              </Box>
+            </Flex>
+            <Text fontSize="11px" color="grey">
+              {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
+            </Text>
+            {(event.no_notification | false) !== (order.no_notification | false)   &&  (
+              <Flex mt={15}> 
+                { event.no_notification ? (
+                  <Box pl={10} width={40} height={10}>
+                    <Silent viewBox="10 0 200 160" />
+                  </Box>
+                ) : (
+                  <Box pl={10} width={50} height={10}>
+                    <Notification viewBox="0 0 160 150" />
+                  </Box>    
+                )}
+              <Box mt={2} pr={2}> 
+                <Text color="gray"> 
+                  Notifications related to this swap are 
+                  { event.no_notification ? " disabled" : " enabled" }
+                  .
+                </Text>
+                </Box>
               </Flex>
-            )}
-          </Flex>
+            )}   
+            <Flex mt={4}>
+              <Text mr={2} fontSize={1} color="grey">
+                Payment Status
+              </Text>
+              <Badge
+                mr={4}
+                color={payStatusColors.color}
+                bg={payStatusColors.bgColor}
+              >
+                {event.raw.payment_status}
+              </Badge>
+              <Text mr={2} fontSize={1} color="grey">
+                Return Status
+              </Text>
+              <Badge
+                mr={4}
+                color={returnStatusColors.color}
+                bg={returnStatusColors.bgColor}
+              >
+                {event.raw.return_order.status}
+              </Badge>
+              <Text mr={2} fontSize={1} color="grey">
+                Fulfillment Status
+              </Text>
+              <Badge
+                color={fulfillStatusColors.color}
+                bg={fulfillStatusColors.bgColor}
+              >
+                {event.raw.fulfillment_status}
+              </Badge>
+            </Flex>
+          </Box>
+          {actions.length > 0 && (
+            <Dropdown>
+              {actions.map(o => (
+                <Text color={o.variant} onClick={o.onClick}>
+                  {o.label}
+                </Text>
+              ))}
+            </Dropdown>
+          )}
         </Flex>
         {expanded && (
           <>
