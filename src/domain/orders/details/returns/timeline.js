@@ -7,8 +7,11 @@ import Dropdown from "../../../../components/dropdown"
 import { getErrorMessage } from "../../../../utils/error-messages"
 import LineItem from "../line-item"
 
-export default ({ event, order, onReceiveReturn, onCancelReturn, toaster }) => {
-  const fontColor = event.isLatest ? "medusa" : "inactive"
+import { ReactComponent as Silent} from "../../../../assets/svg/silent.svg"
+import { ReactComponent as Notification} from "../../../../assets/svg/notification.svg"
+
+const LineItemLabel = styled(Text)`
+  ${Typography.Base};
 
   const canceled = event.status === "canceled"
   const [expanded, setExpanded] = useState(!canceled)
@@ -53,10 +56,62 @@ export default ({ event, order, onReceiveReturn, onCancelReturn, toaster }) => {
             }}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? "Hide" : "Show"}
-          </Text>
-        )}
-        {!canceled && event.raw.status !== "received" && (
+            {lineItem.title}
+            <br /> {lineItem.variant.sku}
+            <br />
+            {((1 + taxRate / 100) * lineItem.unit_price) / 100}{" "}
+            {currency.toUpperCase()}
+          </LineItemLabel>
+        </Box>
+      </Flex>
+    </Flex>
+  )
+}
+
+export default ({ event, order, onReceiveReturn }) => {
+  return (
+    <Box sx={{ borderBottom: "hairline" }} pb={3} mb={3} px={3}>
+      <Text fontSize={1} color="grey" fontWeight="500">
+        Return {event.status}
+      </Text>
+      <Text fontSize="11px" color="grey" mb={3}>
+        {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
+      </Text>
+      {(event.no_notification | false) !== (order.no_notification | false)   &&  (
+              <Flex mt={15}> 
+                { event.no_notification ? (
+                  <Box pl={10} width={40} height={10}>
+                    <Silent viewBox="10 0 200 160" />
+                  </Box>
+                ) : (
+                  <Box pl={10} width={50} height={10}>
+                    <Notification viewBox="0 0 160 150" />
+                  </Box>    
+                )}
+              <Box mt={2} pr={2}> 
+                <Text color="gray"> 
+                  Notifications related to this return are 
+                  { event.no_notification ? " disabled" : " enabled" }
+                  .
+                </Text>
+                </Box>
+              </Flex>
+      )}
+      <br/>   
+      <Flex justifyContent="space-between">
+        <Box>
+          {event.items.map(lineItem => (
+            <LineItem
+              key={lineItem._id}
+              currency={order.currency_code}
+              lineItem={lineItem}
+              taxRate={order.region.tax_rate}
+              onReceiveReturn={onReceiveReturn}
+              rawEvent={event.raw}
+            />
+          ))}
+        </Box>
+        {event.raw.status !== "received" && (
           <Flex>
             <Button
               onClick={() => onReceiveReturn(event.raw)}

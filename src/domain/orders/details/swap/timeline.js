@@ -72,7 +72,7 @@ export default ({
     actions.push({
       label:
         event.raw.difference_due > 0 ? "Capture Payment" : "Refund Difference",
-      onClick: () => onProcessPayment(event.raw.id),
+      onClick: () => onProcessPayment(event.raw.id, { no_notification: event.no_notification }),
     })
   }
 
@@ -84,7 +84,7 @@ export default ({
     actions.push({
       label: "Fulfill Swap",
       onClick: () => {
-        onFulfillSwap(event.raw)
+        onFulfillSwap(event.raw, {no_notification: event.no_notification})
       },
     })
   }
