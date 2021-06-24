@@ -252,7 +252,6 @@ const NewOrder = ({ onDismiss, refresh }) => {
       draftOrder.no_notification_order = true
     }
 
-
     draftOrder.shipping_methods = [option]
 
     setCreatingOrder(true)
