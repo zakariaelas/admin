@@ -4,9 +4,7 @@ import { navigate } from "gatsby"
 import styled from "@emotion/styled"
 import moment from "moment"
 
-import { decideBadgeColor } from "../../../../utils/decide-badge-color"
-import { ReactComponent as Silent} from "../../../../assets/svg/silent.svg"
-import { ReactComponent as Notification} from "../../../../assets/svg/notification.svg"
+import { decideBadgeColor } from "../../../../utils/decide-badge-color""
 import Typography from "../../../../components/typography"
 import Badge from "../../../../components/fundamentals/badge"
 import Button from "../../../../components/button"
@@ -81,16 +79,6 @@ export default ({
               {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
             </Text>
             {(event.no_notification | false) !== (order.no_notification | false)   &&  (
-              <Flex mt={15}> 
-                { event.no_notification ? (
-                  <Box pl={10} width={40} height={10}>
-                    <Silent viewBox="10 0 200 160" />
-                  </Box>
-                ) : (
-                  <Box pl={10} width={50} height={10}>
-                    <Notification viewBox="0 0 160 150" />
-                  </Box>    
-                )}
               <Box mt={2} pr={2}> 
                 <Text color="gray"> 
                   Notifications related to this claim are 
@@ -98,7 +86,6 @@ export default ({
                   .
                 </Text>
                 </Box>
-              </Flex>
             )}   
             {event.claim_type === "replace" ? (
               <Flex mt={4}>

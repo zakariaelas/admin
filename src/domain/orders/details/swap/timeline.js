@@ -9,13 +9,55 @@ import { ReactComponent as Clipboard } from "../../../../assets/svg/clipboard.sv
 import { decideBadgeColor } from "../../../../utils/decide-badge-color"
 import Typography from "../../../../components/typography"
 import Badge from "../../../../components/badge"
-import { ReactComponent as Silent} from "../../../../assets/svg/silent.svg"
-import { ReactComponent as Notification} from "../../../../assets/svg/notification.svg"
-import Button from "../../../../components/button"
 import Dropdown from "../../../../components/dropdown"
 import useMedusa from "../../../../hooks/use-medusa"
-import CopyToClipboard from "../../../../components/copy-to-clipboard"
-import SwapDetails from "./swap-details/"
+
+const LineItemLabel = styled(Text)`
+  ${Typography.Base};
+
+  cursor: pointer;
+
+  font-size: 10px;
+`
+
+const LineItem = ({ lineItem, currency, taxRate }) => {
+  const productId = lineItem?.variant?.product.id || undefined
+
+  return (
+    <Flex alignItems="center">
+      <Flex flex={1} alignItems="center">
+        <Box alignSelf={"center"} minWidth={"35px"}>
+          {lineItem.quantity} x
+        </Box>
+        <Box mx={2}>
+          <Image
+            src={lineItem.thumbnail || ""}
+            sx={{
+              objectFit: "contain",
+              objectPosition: "center",
+              width: 35,
+              height: 35,
+            }}
+          />
+        </Box>
+        <Box>
+          <LineItemLabel
+            ml={2}
+            mr={5}
+            onClick={() => navigate(`/a/products/${productId}`)}
+          >
+            {lineItem.title}
+            <br /> {lineItem.variant?.sku}
+            <br />
+            {((100 + taxRate) * lineItem.unit_price) / 10000}{" "}
+            {currency.toUpperCase()}
+          </LineItemLabel>
+        </Box>
+      </Flex>
+    </Flex>
+  )
+}
+
 export default ({
   event,
   order,
@@ -72,7 +114,7 @@ export default ({
     actions.push({
       label:
         event.raw.difference_due > 0 ? "Capture Payment" : "Refund Difference",
-      onClick: () => onProcessPayment(event.raw.id, { no_notification: event.no_notification }),
+      onClick: () => onProcessPayment(event.raw.id),
     })
   }
 
@@ -84,7 +126,7 @@ export default ({
     actions.push({
       label: "Fulfill Swap",
       onClick: () => {
-        onFulfillSwap(event.raw, {no_notification: event.no_notification})
+        onFulfillSwap(event.raw)
       },
     })
   }
@@ -171,16 +213,6 @@ export default ({
               {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
             </Text>
             {(event.no_notification | false) !== (order.no_notification | false)   &&  (
-              <Flex mt={15}> 
-                { event.no_notification ? (
-                  <Box pl={10} width={40} height={10}>
-                    <Silent viewBox="10 0 200 160" />
-                  </Box>
-                ) : (
-                  <Box pl={10} width={50} height={10}>
-                    <Notification viewBox="0 0 160 150" />
-                  </Box>    
-                )}
               <Box mt={2} pr={2}> 
                 <Text color="gray"> 
                   Notifications related to this swap are 
@@ -188,7 +220,6 @@ export default ({
                   .
                 </Text>
                 </Box>
-              </Flex>
             )}   
             <Flex mt={4}>
               <Text mr={2} fontSize={1} color="grey">
