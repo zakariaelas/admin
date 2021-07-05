@@ -191,7 +191,6 @@ const NewOrder = ({ onDismiss, refresh }) => {
 
       setShippingOptions(options)
     } catch (error) {
-      console.log(error)
       throw Error("Could not fetch shipping options")
     }
   }
