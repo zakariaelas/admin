@@ -929,7 +929,22 @@ const ClaimMenu = ({ order, onCreate, onDismiss, toaster }) => {
             </>
           )}
         </Modal.Content>
-        <Modal.Footer justifyContent="flex-end">
+        <Modal.Footer>
+          <Flex>
+            <Box px={0} py={1}>
+              <input
+                id="noNotification"
+                name="noNotification"
+                checked={!noNotification}
+                onChange={() => setNoNotification(!noNotification)}
+                type="checkbox"
+              />
+            </Box>
+            <Box px={2} py={1}>
+              <Text fontSize={1}>Send notifications</Text>
+            </Box>
+          </Flex>
+          <Box ml="auto" />
           <Button
             disabled={!ready}
             loading={submitting}
