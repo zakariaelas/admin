@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { Box, Flex, Text } from "rebass"
-import Badge from "../../../../../components/fundamentals/badge"
+import Badge from "../../../../../components/badge"
 import CopyToClipboard from "../../../../../components/copy-to-clipboard"
 import Divider from "../../../../../components/divider"
 import Dropdown from "../../../../../components/dropdown"
@@ -125,13 +125,14 @@ const PaymentBreakdown = ({ swap, order, cart }) => {
   )
 }
 
-const PaymentInformation = ({
-  event,
-  onProcessPayment,
-  swap,
-  order,
-  paymentLink,
-}) => {
+const PaymentInformation = ({ event, onProcessPayment, swap, order }) => {
+  const { store } = useMedusa("store")
+
+  const payment_link = useMemo(() => {
+    if (!store || !store.payment_link_template) return ""
+
+    return store.payment_link_template.replace(/\{cart_id\}/, event.raw.cart_id)
+  }, [store])
   const paymentStatusColors = decideBadgeColor(event.raw.payment_status)
 
   const actions = useMemo(() => {
@@ -139,7 +140,6 @@ const PaymentInformation = ({
     if (
       event.raw.payment_status !== "captured" &&
       event.raw.payment_status !== "difference_refunded" &&
-      event.raw.canceled_at === null &&
       event.raw.difference_due !== 0
     ) {
       actions.push({
@@ -171,7 +171,7 @@ const PaymentInformation = ({
         {actions.map(action => (
           <Dropdown
             key={action.label}
-            topPlacement={5}
+            topPlacement="0"
             minHeight="24px"
             width="28px"
             sx={{
@@ -186,8 +186,8 @@ const PaymentInformation = ({
       <Box mb={2}>
         <CopyToClipboard
           label="Copy payment link"
-          tooltipText={paymentLink}
-          copyText={paymentLink}
+          tooltipText={payment_link}
+          copyText={payment_link}
         />
       </Box>
       <Box>

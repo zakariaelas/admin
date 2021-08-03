@@ -9,12 +9,7 @@ const formatDecimalAndCurrency = (amount, currency) => {
   return `${fixed} ${currency.toUpperCase()}`
 }
 
-const SwapShippingMethods = ({
-  shipping_methods = [],
-  taxRate,
-  currency,
-  fontColor,
-}) => {
+const SwapShippingMethods = ({ shipping_methods = [], taxRate, currency }) => {
   return (
     <>
       {!isEmpty(shipping_methods) ? (
@@ -33,7 +28,7 @@ const SwapShippingMethods = ({
                 ) : (
                   <Flex alignItems="center">
                     <WarningIcon />
-                    <Text ml={2} color={fontColor}>
+                    <Text ml={2} color="#89959C">
                       Order was shipped with a now deleted option
                     </Text>
                   </Flex>
@@ -43,7 +38,7 @@ const SwapShippingMethods = ({
           </Box>
         ))
       ) : (
-        <Text fontSize={12} color={fontColor}>
+        <Text fontSize={12} color="#89959C">
           No shipping for this order
         </Text>
       )}

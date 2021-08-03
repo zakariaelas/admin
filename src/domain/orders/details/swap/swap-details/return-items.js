@@ -1,14 +1,12 @@
 import React, { useMemo } from "react"
 import { Box, Flex, Text } from "rebass"
-import Badge from "../../../../../components/fundamentals/badge"
+import Badge from "../../../../../components/badge"
 import Dropdown from "../../../../../components/dropdown"
 import { decideBadgeColor } from "../../../../../utils/decide-badge-color"
-import LineItem from "../../line-item"
-
+import LineItem from "../line-item"
 import SwapShippingMethods from "./shipping-methods"
 
 const ReturnOrderInformation = ({ event, onReceiveReturn, order }) => {
-  const fontColor = event.isLatest ? "medusa" : "inactive"
   const returnStatusColors = decideBadgeColor(
     event.raw.return_order && event.raw.return_order.status
   )
@@ -33,7 +31,7 @@ const ReturnOrderInformation = ({ event, onReceiveReturn, order }) => {
     <Box>
       <Flex mb={3} justifyContent="space-between">
         <Flex alignItems="center">
-          <Text color={fontColor} mr={3} fontWeight={500}>
+          <Text mr={3} fontWeight={500}>
             Return items
           </Text>
           <Badge
@@ -46,7 +44,7 @@ const ReturnOrderInformation = ({ event, onReceiveReturn, order }) => {
         {actions.map(action => (
           <Dropdown
             key={action.label}
-            topPlacement={5}
+            topPlacement="0"
             minHeight="24px"
             width="28px"
             sx={{
@@ -60,21 +58,22 @@ const ReturnOrderInformation = ({ event, onReceiveReturn, order }) => {
       </Flex>
       {event.return_lines.map((lineItem, i) => (
         <LineItem
-          fontColor={fontColor}
           key={lineItem.id}
-          order={order}
+          currency={order.currency_code}
           lineItem={lineItem}
+          taxRate={order.tax_rate}
+          onReceiveReturn={onReceiveReturn}
+          rawEvent={event.raw}
         />
       ))}
       <Box mt={3}>
-        <Text color={fontColor} fontSize={12} mb={2} fontWeight={500}>
+        <Text fontSize={12} mb={2} fontWeight={500}>
           Return Method(s)
         </Text>
         <SwapShippingMethods
           shipping_methods={event.raw.return_order?.shipping_methods}
           currency={order.currency_code}
           taxRate={order.tax_rate}
-          fontColor={fontColor}
         />
       </Box>
     </Box>

@@ -13,7 +13,6 @@ const SwapDetails = ({
   swapId,
   order,
   onReceiveReturn,
-  paymentLink,
   onFulfillSwap,
   onProcessPayment,
 }) => {
@@ -27,7 +26,7 @@ const SwapDetails = ({
 
   return (
     <>
-      <Button onClick={handleOpen} variant="primary">
+      <Button onClick={handleOpen} mr={3} variant="primary">
         Swap details
       </Button>
       {isOpen && (
@@ -71,7 +70,6 @@ const SwapDetails = ({
                     order={order}
                     swap={swap}
                     onProcessPayment={onProcessPayment}
-                    paymentLink={paymentLink}
                   />
                 </Box>
               </Flex>

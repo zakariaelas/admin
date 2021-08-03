@@ -11,6 +11,7 @@ import Typography from "../../../../components/typography"
 import Badge from "../../../../components/badge"
 import Dropdown from "../../../../components/dropdown"
 import useMedusa from "../../../../hooks/use-medusa"
+import SwapDetails from "./swap-details/"
 
 const LineItemLabel = styled(Text)`
   ${Typography.Base};
@@ -253,15 +254,25 @@ export default ({
               </Badge>
             </Flex>
           </Box>
-          {actions.length > 0 && (
-            <Dropdown>
-              {actions.map(o => (
-                <Text color={o.variant} onClick={o.onClick}>
-                  {o.label}
-                </Text>
-              ))}
-            </Dropdown>
-          )}
+          <Flex>
+            <SwapDetails
+              event={event}
+              order={order}
+              onReceiveReturn={onReceiveReturn}
+              onFulfillSwap={onFulfillSwap}
+              swapId={event.raw.id}
+              onProcessPayment={onProcessPayment}
+            />
+            {actions.length > 0 && (
+              <Dropdown>
+                {actions.map(o => (
+                  <Text color={o.variant} onClick={o.onClick}>
+                    {o.label}
+                  </Text>
+                ))}
+              </Dropdown>
+            )}
+          </Flex>
         </Flex>
         {expanded && (
           <>
