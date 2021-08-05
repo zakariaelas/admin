@@ -12,9 +12,9 @@ import Button from "../../../../components/button"
 import Card from "../../../../components/card"
 import Divider from "../../../../components/divider"
 import InfoTooltip from "../../../../components/info-tooltip"
-import Input from "../../../../components/molecules/input"
-import TagInput from "../../../../components/molecules/tag-input"
+import Input from "../../../../components/input"
 import Spinner from "../../../../components/spinner"
+import TagInput from "../../../../components/tag-input"
 import TextArea from "../../../../components/textarea"
 import Tooltip from "../../../../components/tooltip"
 import useMedusa from "../../../../hooks/use-medusa"
@@ -165,7 +165,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
         }
 
         if (product.tags) {
-          const productTags = product.tags.map((tag) => tag.value)
+          const productTags = product.tags.map(tag => tag.value)
 
           setTags(productTags)
         }
@@ -190,7 +190,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
     },
   ]
 
-  const onImageChange = (images) => {
+  const onImageChange = images => {
     Medusa.uploads.create(images).then(({ data }) => {
       const uploaded = data.uploads.map(({ url }) => url)
       setThumbnail(uploaded[0])
@@ -248,26 +248,6 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
     setTags(newTags)
     setIsDirty(true)
   }
-  const handleProductStatusAction = () => {
-    switch (product.status) {
-      case "draft":
-        return {
-          type: "cta",
-          label: "Publish",
-          onClick: () => onSubmit({ status: "published" }),
-          isLoading: isLoading,
-        }
-      case "published":
-        return {
-          type: "cta",
-          label: "Unpublish",
-          onClick: () => onSubmit({ status: "draft" }),
-          isLoading: isLoading,
-        }
-      default:
-        return null
-    }
-  }
 
   if (isLoading) {
     return (
@@ -283,18 +263,14 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
     <Card
       as="form"
       onSubmit={handleSubmit(handleOnSubmit)}
-      onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+      onKeyDown={e => e.key === "Enter" && e.preventDefault()}
       mb={2}
     >
-      <Card.Header
-        dropdownOptions={dropdownOptions}
-        // Check for product status prop. for backwards compatibility
-        action={product?.status && handleProductStatusAction()}
-      >
+      <Card.Header dropdownOptions={dropdownOptions}>
         Product Information
       </Card.Header>
-      <Card.Body px={3} sx={{ gap: "128px" }}>
-        <Box flexGrow="1" maxWidth="425px">
+      <Card.Body px={3}>
+        <Box flexGrow="1" paddingRight={6}>
           <Flex width={1} flexDirection={"column"}>
             <Box mb={3}>
               <Input
@@ -337,21 +313,12 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                 placeholder="Select collection..."
                 onChange={handleCollectionChange}
                 options={
-                  collections?.map((col) => ({
+                  collections?.map(col => ({
                     value: col.id,
                     label: col.title,
                   })) || []
                 }
               />
-            </Box>
-            <Box mb={3}>
-              <Flex mb={2} alignItems="center">
-                <Text mr={2} fontSize={1} fontWeight="500">
-                  Handle
-                </Text>
-                <InfoTooltip tooltipText="URL Slug for the product" />
-              </Flex>
-              <Input name="handle" ref={register} boldLabel={"true"} />
             </Box>
             <Divider mb={3} />
 
@@ -373,25 +340,24 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
               }
             >
               <Box mb={3}>
-                <Flex mb={2} alignItems="center">
-                  <Text mr={2} fontSize={1} fontWeight="500">
-                    Handle
-                  </Text>
-                  <InfoTooltip tooltipText="URL Slug for the product" />
-                </Flex>
-                <Input name="handle" ref={register} boldLabel={"true"} />
+                <Input
+                  name="handle"
+                  label="Handle"
+                  ref={register}
+                  boldLabel={"true"}
+                />
               </Box>
               <Box mb={3}>
                 <Flex mb={2} alignItems="center">
                   <Text mr={2} fontSize={1} fontWeight="500">
                     Tags (separated by comma)
                   </Text>
-                  <InfoTooltip tooltipText="Tags are one word descriptors for the product used for searches" />
+                  <InfoTooltip tooltipText="Tags of the product" />
                 </Flex>
                 <TagInput
                   placeholder="Spring, summer..."
                   values={tags || []}
-                  onChange={(values) => handleTagChange(values)}
+                  onChange={values => handleTagChange(values)}
                   boldLabel={"true"}
                   withTooltip
                   tooltipText="Subtitle of the product"
@@ -402,7 +368,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                       Frequently used tags:{" "}
                     </Text>
                     <Text fontSize="10px">
-                      {frequentTags.map((t) => t.value).join(", ")}
+                      {frequentTags.map(t => t.value).join(", ")}
                     </Text>
                   </Flex>
                 ) : null}
@@ -420,7 +386,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                   onChange={handleTypeChange}
                   isClearable={true}
                   options={
-                    types?.map((typ) => ({
+                    types?.map(typ => ({
                       value: typ.value,
                       label: typ.value,
                     })) || []

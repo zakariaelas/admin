@@ -6,21 +6,36 @@ import Button from "../../../../components/button"
 import Card from "../../../../components/card"
 import ImagesDropzone from "../../../../components/image-dropzone"
 import Medusa from "../../../../services/api"
-import { getErrorMessage } from "../../../../utils/error-messages"
 
-const Images = ({ product, refresh, toaster }) => {
+const Images = ({ isLoading, product, refresh, toaster }) => {
   const [uploads, setUploads] = useState([])
   const [images, setImages] = useState([])
+  const [selectedImages, setSelectedImages] = useState([])
   const [isSavingImages, setIsSavingImages] = useState(false)
   const [isDirty, setIsDirty] = useState(false)
 
+  const handleImageSelection = image => {
+    if (selectedImages.includes(image)) {
+      setSelectedImages(selectedImages.filter(im => im !== image))
+    } else {
+      setSelectedImages(selectedImages => [...selectedImages, image])
+    }
+  }
+
   useEffect(() => {
     if (product) {
-      let imgs = product.images.map((img) => img.url)
+      let imgs = [product.thumbnail, ...product.images.map(img => img.url)]
       imgs = [...new Set(imgs)].filter(Boolean)
       setImages([...imgs])
     }
   }, [product])
+
+  const handleImageDelete = () => {
+    const newImages = _.difference(images, selectedImages)
+    setSelectedImages([])
+    setImages(newImages)
+    setIsDirty(true)
+  }
 
   const handleSave = () => {
     setIsSavingImages(true)
@@ -30,63 +45,72 @@ const Images = ({ product, refresh, toaster }) => {
         const uploaded = data.uploads.map(({ url }) => url)
         return uploaded
       })
-      .then((uploadedImgs) => {
-        const minusLocalImages = _.difference(
+      .then(uploadedImgs => {
+        let minusLocalImages = _.difference(
           images,
-          uploads.map((u) => u.preview)
+          uploads.map(u => u.preview)
         )
-        const allImages = [...minusLocalImages, ...uploadedImgs]
+        let allImages = [...minusLocalImages, ...uploadedImgs]
         Medusa.products
           .update(product.id, { images: allImages })
           .then(() => {
             setIsSavingImages(false)
+            setSelectedImages([])
             setUploads([])
             setIsDirty(false)
             refresh({ id: product.id })
             toaster("Successfully saved images", "success")
           })
-          .catch((error) => toaster(getErrorMessage(error), "error"))
+          .catch(() => toaster("Failed to upload images", "error"))
       })
   }
 
   return (
     <Card mb={2}>
-      <Card.Header>Images</Card.Header>
+      <Card.Header
+        action={
+          selectedImages.length > 0 && {
+            type: "delete",
+            label: "Delete images",
+            onClick: () => handleImageDelete(),
+          }
+        }
+      >
+        {selectedImages.length > 0
+          ? `${selectedImages.length} image(s) selected`
+          : "Images"}
+      </Card.Header>
       <Card.Body flexDirection="column" px={3}>
         <ImagesDropzone
           images={images}
           value={uploads}
-          onChange={(files) => {
+          onChange={files => {
             setUploads([...uploads, ...files])
-            const merged = [...images, ...files.map((f) => f.preview)]
+            let merged = [...images, ...files.map(f => f.preview)]
             setImages(merged)
             setIsDirty(true)
           }}
         >
-          {images.map((image) => (
+          {images.map(image => (
             <ImagesDropzone.Preview
-              key={image}
-              onClick={(e) => {
+              selected={selectedImages.includes(image)}
+              onClick={e => {
                 e.stopPropagation()
+                handleImageSelection(image)
               }}
               sx={{ position: "relative" }}
               src={image}
             >
               <CloseIcon
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation()
-                  const newImages = images.filter((img) => image != img)
+                  const newImages = images.filter(img => image != img)
                   setImages(newImages)
-                  const newUploads = uploads.filter(
-                    (img) => image != img.preview
-                  )
-                  setUploads(newUploads)
                   setIsDirty(true)
                 }}
                 style={{
                   position: "absolute",
                   right: 5,
-                  zIndex: 5,
                   top: 5,
                   cursor: "pointer",
                 }}

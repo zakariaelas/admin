@@ -13,7 +13,6 @@ import NotFound from "../../../components/not-found"
 import Card from "../../../components/card"
 import Options from "./options"
 import InventoryManager from "./inventory"
-import { getErrorMessage } from "../../../utils/error-messages"
 
 const ProductDetail = ({ id }) => {
   const {
