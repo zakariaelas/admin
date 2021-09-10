@@ -130,14 +130,94 @@ const LineItem = ({ lineItem, currency, taxRate }) => {
   }
 }
 
-export default ({ events, ...rest }) => {
+export default ({
+  events,
+  order,
+  onResendNotification,
+  onSaveClaim,
+  onFulfillClaim,
+  onFulfillSwap,
+  onProcessSwapPayment,
+  onReceiveReturn,
+  onCancelReturn,
+  onCancelClaim,
+  onCancelSwap,
+  toaster,
+}) => {
   return (
-    <Timeline>
-      {events.map((event, idx) => (
-        <Timeline.Item isLast={events.length - 1 === idx}>
-          {getTimelineEvent(event, rest)}
-        </Timeline.Item>
-      ))}
-    </Timeline>
+    <Box>
+      {events.map(event => {
+        switch (event.type) {
+          case "notification":
+            return (
+              <NotificationTimeline
+                key={event.id}
+                event={event}
+                onResend={onResendNotification}
+              />
+            )
+          case "return":
+            return (
+              <ReturnTimeline
+                key={event.id}
+                event={event}
+                order={order}
+                onReceiveReturn={onReceiveReturn}
+                onCancelReturn={onCancelReturn}
+                toaster={toaster}
+              />
+            )
+          case "claim":
+            return (
+              <ClaimTimeline
+                key={event.id}
+                event={event}
+                order={order}
+                onSaveClaim={onSaveClaim}
+                onFulfillClaim={onFulfillClaim}
+                onReceiveReturn={onReceiveReturn}
+                onCancelClaim={onCancelClaim}
+              />
+            )
+          case "swap":
+            return (
+              <SwapTimeline
+                key={event.id}
+                event={event}
+                order={order}
+                onProcessPayment={onProcessSwapPayment}
+                onFulfillSwap={onFulfillSwap}
+                onReceiveReturn={onReceiveReturn}
+                onCancelReturn={onCancelReturn}
+                onCancelSwap={onCancelSwap}
+              />
+            )
+          default:
+            return (
+              <Box
+                key={event.id}
+                sx={{ borderBottom: "hairline" }}
+                pb={3}
+                mb={3}
+              >
+                <Text ml={3} fontSize={1} color="grey" fontWeight="500" mb={2}>
+                  {event.event}
+                </Text>
+                <Text fontSize="11px" color="grey" ml={3} mb={3}>
+                  {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
+                </Text>
+                {event.items.map((lineItem, i) => (
+                  <LineItem
+                    key={i}
+                    currency={order.currency_code}
+                    lineItem={lineItem}
+                    taxRate={order.tax_rate}
+                  />
+                ))}
+              </Box>
+            )
+        }
+      })}
+    </Box>
   )
 }

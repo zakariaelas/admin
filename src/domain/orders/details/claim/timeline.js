@@ -67,34 +67,28 @@ export default ({
       <Box width={"100%"}>
         <Flex mb={2} px={3} width={"100%"} justifyContent="space-between">
           <Box>
-            <Flex flexDirection="column">
-              <Text mr={100} fontSize={1} color={fontColor} fontWeight="500">
+            <Flex mb={2} justifyContent="space-between">
+              <Text mr={100} fontSize={1} color="grey" fontWeight="500">
                 {canceled ? "Claim Canceled" : "Claim Created"}
               </Text>
-              <Text fontSize="11px" color={fontColor}>
-                {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
-              </Text>
             </Flex>
-            <Text fontSize="11px" color="grey">
-              {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
-            </Text>
-            {(event.no_notification || false) !==
-              (order.no_notification || false) && (
-              <Box mt={2} pr={2}>
-                <Text color="gray">
-                  Notifications related to this claim are
-                  {event.no_notification ? " disabled" : " enabled"}.
-                </Text>
-              </Box>
-            )}
-            {event.claim_type === "replace" ? (
-              <Flex mt={4}>
-                <Text mr={2} fontSize={1} color="grey">
-                  Fulfillment Status
+            {expanded && (
+              <>
+                <Text fontSize="11px" color="grey">
+                  {moment(event.time).format("MMMM Do YYYY, H:mm:ss")}
+                  {(event.no_notification || false) !==
+                    (order.no_notification || false) && (
+                    <Box mt={2} pr={2}>
+                      <Text color="gray">
+                        Notifications related to this claim are
+                        {event.no_notification ? " disabled" : " enabled"}.
+                      </Text>
+                    </Box>
+                  )}
                 </Text>
                 {event.claim_type === "replace" ? (
                   <Flex mt={4}>
-                    <Text mr={2} fontSize={1} color={fontColor}>
+                    <Text mr={2} fontSize={1} color="grey">
                       Fulfillment Status
                     </Text>
                     <Badge
@@ -106,7 +100,7 @@ export default ({
                   </Flex>
                 ) : (
                   <Flex mt={4}>
-                    <Text mr={2} fontSize={1} color={fontColor}>
+                    <Text mr={2} fontSize={1} color="grey">
                       Payment Status
                     </Text>
                     <Badge
@@ -123,26 +117,13 @@ export default ({
 
           <Box>
             {actions.length > 0 && !canceled && (
-              <Flex>
-                <Box mr={2}>
-                  {!canceled && (
-                    <Button
-                      onClick={() => setShowEditClaim(true)}
-                      variant="primary"
-                    >
-                      Edit
-                    </Button>
-                  )}
-                </Box>
-
-                <Dropdown>
-                  {actions.map(o => (
-                    <Text color={o.variant} onClick={o.onClick}>
-                      {o.label}
-                    </Text>
-                  ))}
-                </Dropdown>
-              </Flex>
+              <Dropdown>
+                {actions.map(o => (
+                  <Text color={o.variant} onClick={o.onClick}>
+                    {o.label}
+                  </Text>
+                ))}
+              </Dropdown>
             )}
             {canceled && (
               <Text
@@ -166,45 +147,53 @@ export default ({
             <Flex mx={3} justifyContent="space-between" alignItems="center">
               <Box>
                 <Flex mb={2}>
-                  <Text color={fontColor} mr={2}>
-                    Claimed items
-                  </Text>
+                  <Text mr={2}>Claimed items</Text>
                 </Flex>
                 {event.claim_items.map((lineItem, i) => (
                   <LineItem
-                    fontColor={fontColor}
                     key={lineItem.id}
-                    order={order}
+                    currency={order.currency_code}
                     lineItem={lineItem}
+                    taxRate={order.tax_rate}
+                    onReceiveReturn={onReceiveReturn}
+                    rawEvent={event.raw}
                   />
                 ))}
+              </Box>
+              <Box>
+                {!canceled && (
+                  <Button
+                    onClick={() => setShowEditClaim(true)}
+                    variant="primary"
+                  >
+                    Edit
+                  </Button>
+                )}
               </Box>
             </Flex>
             {event.claim_type === "replace" ? (
               <Flex mx={3} justifyContent="space-between" alignItems="center">
                 <Box>
                   <Flex mt={3} mb={2}>
-                    <Text color={fontColor} mr={2}>
-                      New items
-                    </Text>
+                    <Text mr={2}>New items</Text>
                   </Flex>
                   {event.items.map((lineItem, i) => (
                     <LineItem
-                      fontColor={fontColor}
                       key={lineItem.id}
-                      order={order}
+                      currency={order.currency_code}
                       lineItem={lineItem}
+                      taxRate={order.tax_rate}
+                      onReceiveReturn={onReceiveReturn}
+                      rawEvent={event.raw}
                     />
                   ))}
                 </Box>
               </Flex>
             ) : (
               <Flex mx={3} justifyContent="space-between" alignItems="center">
-                <Box color={fontColor}>
+                <Box>
                   <Flex mt={3} mb={2}>
-                    <Text color={fontColor} mr={2}>
-                      Amount refunded
-                    </Text>
+                    <Text mr={2}>Amount refunded</Text>
                   </Flex>
                   {event.raw.refund_amount / 100}{" "}
                   {order.currency_code.toUpperCase()}
