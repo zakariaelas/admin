@@ -77,7 +77,7 @@ export default {
   },
   notes: {
     listByResource(resourceId) {
-      const path = `/admin/notes?resource_id=${resourceId}`
+      let path = `/admin/notes?resource_id=${resourceId}`
       return medusaRequest("GET", path)
     },
     async create(resourceId, resourceType, value) {
@@ -89,11 +89,11 @@ export default {
       })
     },
     update(id, value) {
-      const path = `admin/notes/${id}`
+      let path = `admin/notes/${id}`
       return medusaRequest("POST", path, { value })
     },
     delete(id) {
-      const path = `admin/notes/${id}`
+      let path = `admin/notes/${id}`
       return medusaRequest("DELETE", path)
     },
   },

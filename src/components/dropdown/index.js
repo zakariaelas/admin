@@ -155,7 +155,7 @@ const Dropdown = ({
       {showTrigger && (
         <Button
           sx={sx}
-          minHeight="33px"
+          minHeight="25px"
           alignItems="center"
           variant="primary"
           onClick={() => handleOpen()}

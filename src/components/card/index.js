@@ -29,22 +29,9 @@ const StyledHeader = styled(Flex)`
 `}
 `
 
-Card.Header = ({
-  children,
-  badge,
-  dropdownOptions,
-  action,
-  removeBorderTop,
-  ...rest
-}) => {
+Card.Header = ({ children, badge, dropdownOptions, action, ...rest }) => {
   if (action && !Array.isArray(action)) {
     action = [action]
-  }
-
-  let style = {}
-
-  if (!removeBorderTop) {
-    style = { borderTop: "1px solid #e3e8ee" }
   }
 
   return (
@@ -61,17 +48,18 @@ Card.Header = ({
           </Badge>
         )}
       </Flex>
-      {!!action && (
-        <Button
-          loading={action.isLoading}
-          onClick={action.onClick}
-          disabled={action.disabled}
-          mr={3}
-          variant={action.type || "cta"}
-        >
-          {action.label}
-        </Button>
-      )}
+      {!!action &&
+        action.map(a => (
+          <Button
+            loading={a.isLoading}
+            onClick={a.onClick}
+            disabled={a.disabled}
+            mr={3}
+            variant={a.type || "cta"}
+          >
+            {a.label}
+          </Button>
+        ))}
       {dropdownOptions && dropdownOptions.length > 0 && (
         <Dropdown mr={3}>
           {dropdownOptions.map(o => (
