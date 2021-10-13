@@ -2,7 +2,6 @@ import React from "react"
 import { Text, Flex, Box } from "rebass"
 import moment from "moment"
 import Button from "../../../../components/button"
-import Dropdown from "../../../../components/dropdown"
 
 export default ({ event, onResend }) => {
   const fontColor = event.isLatest ? "medusa" : "inactive"

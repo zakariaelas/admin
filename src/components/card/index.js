@@ -29,9 +29,22 @@ const StyledHeader = styled(Flex)`
 `}
 `
 
-Card.Header = ({ children, badge, dropdownOptions, action, ...rest }) => {
+Card.Header = ({
+  children,
+  badge,
+  dropdownOptions,
+  action,
+  removeBorderTop,
+  ...rest
+}) => {
   if (action && !Array.isArray(action)) {
     action = [action]
+  }
+
+  let style = {}
+
+  if (!removeBorderTop) {
+    style = { borderTop: "1px solid #e3e8ee" }
   }
 
   return (
