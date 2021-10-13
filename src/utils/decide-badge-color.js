@@ -3,6 +3,7 @@ export function decideBadgeColor(batchLabel) {
     case "captured":
     case "completed":
     case "shipped":
+    case "published":
     case "registered":
     case "difference_refunded":
     case "received":
