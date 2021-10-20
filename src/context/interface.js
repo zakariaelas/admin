@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 export const defaultInterfaceContext = {
-  onSearch: query => {},
-  setOnSearch: (query) => {},
+  onSearch: () => {},
+  setOnSearch: () => {},
   onUnmount: () => {},
   display: false,
 }
