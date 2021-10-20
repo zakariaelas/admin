@@ -35,7 +35,5 @@ module.exports = {
       options: { prefixes: [`/a/*`] },
     },
     "gatsby-plugin-portal",
-    "gatsby-plugin-postcss",
-    "gatsby-plugin-typescript",
   ],
 }

@@ -271,7 +271,6 @@ const NewOrder = ({}) => {
               })}
             </Box>
             <Dropdown
-              leftAlign
               disabled={!selectedRegion}
               toggleText={"+ Add product"}
               showSearch
@@ -280,7 +279,7 @@ const NewOrder = ({}) => {
             >
               {searchResults.map(s => (
                 <Flex
-                  key={s.variant_id} 
+                  key={s.variant_id}
                   alignItems="center"
                   onClick={() => handleAddItemToSwap(s)}
                 >
