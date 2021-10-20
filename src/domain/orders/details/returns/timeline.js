@@ -4,8 +4,8 @@ import moment from "moment"
 
 import Button from "../../../../components/button"
 import Dropdown from "../../../../components/dropdown"
+import { getErrorMessage } from "../../../../utils/error-messages"
 import LineItem from "../line-item"
-import SimpleEvent from "../timeline/simple-event"
 
 export default ({ event, order, onReceiveReturn, onCancelReturn, toaster }) => {
   const fontColor = event.isLatest ? "medusa" : "inactive"
@@ -20,10 +20,7 @@ export default ({ event, order, onReceiveReturn, onCancelReturn, toaster }) => {
   const cancelReturn = () => {
     return onCancelReturn(event.raw.id)
       .then()
-      .catch(error => {
-        const errorData = error.response.data.message
-        toaster(`${errorData}`, "error")
-      })
+      .catch(error => toaster(getErrorMessage(error), "error"))
   }
 
   return (

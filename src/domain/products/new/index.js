@@ -24,7 +24,6 @@ import Creatable from "react-select/creatable"
 
 import { getCombinations } from "./utils/get-combinations"
 import { Label } from "@rebass/forms"
-import _ from "lodash"
 import { getErrorMessage } from "../../../utils/error-messages"
 
 const StyledSelect = styled(Select)`
