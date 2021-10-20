@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const STORE_URL = process.env.GATSBY_STORE_URL || "http://localhost:4000"
+let baseURL = "http://localhost:9000"
 
 // deprecated
 if (process.env.GATSBY_STORE_URL) {
