@@ -293,8 +293,8 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
       >
         Product Information
       </Card.Header>
-      <Card.Body px={3}>
-        <Box flexGrow="1" paddingRight={6}>
+      <Card.Body px={3} sx={{ gap: "128px" }}>
+        <Box flexGrow="1" maxWidth="425px">
           <Flex width={1} flexDirection={"column"}>
             <Box mb={3}>
               <Input

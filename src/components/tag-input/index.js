@@ -1,3 +1,5 @@
+import React, { useState, useRef } from "react"
+import { Box, Flex } from "rebass"
 import styled from "@emotion/styled"
 import React, { useRef, useState } from "react"
 import { Box, Flex } from "rebass"
@@ -8,42 +10,6 @@ const TAB_KEY = 9
 const BACKSPACE_KEY = 8
 const ARROW_LEFT_KEY = 37
 const ARROW_RIGHT_KEY = 39
-
-const Remove = styled.div`
-  cursor: pointer;
-  display: inline-block;
-  padding-left: 5px;
-`
-
-const TextWrapper = styled.div`
-  display: inline-block;
-`
-
-const TagBox = styled(Box)`
-  white-space: nowrap;
-
-  ${props =>
-    props.highlighted &&
-    `
-      box-shadow: ${props.theme.shadows.tagBoxShadow};
-  `}
-`
-
-const StyledInput = styled.input`
-  ${Typography.Base}
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  padding: 8px;
-  &:focus {
-    outline: none;
-  }
-
-  &::placeholder {
-    opacity: 0.2;
-  }
-`
 
 const TagInput = ({ onChange, values, onBlur = () => {}, ...props }) => {
   const [isFocused, setFocused] = useState(false)
