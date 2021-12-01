@@ -100,7 +100,7 @@ const Variants = ({
         upc: v.upc || undefined,
         prices: cleanPrices,
         inventory_quantity: parseInt(v.inventory_quantity),
-        options: v.options.map((o) => ({
+        options: v.options.map(o => ({
           value: o.value,
           option_id: o.option_id,
         })),
