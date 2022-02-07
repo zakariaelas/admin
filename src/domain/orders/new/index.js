@@ -1,16 +1,17 @@
 import styled from "@emotion/styled"
-import Medusa from "../../../services/api"
-
-import ProductSelector from "./product-selector"
-import Button from "../../../components/button"
+import { Label, Radio } from "@rebass/forms"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { MultiSelect } from "react-multi-select-component"
+import { Box, Flex, Text } from "rebass"
+import Dropdown from "../../../components/dropdown"
 import Input from "../../../components/molecules/input"
 import Select from "../../../components/select"
 import Spinner from "../../../components/spinner"
 import Typography from "../../../components/typography"
 import useMedusa from "../../../hooks/use-medusa"
-import Spinner from "../../../components/spinner"
-import Dropdown from "../../../components/dropdown"
+import Medusa from "../../../services/api"
+import ProductSelector from "./product-selector"
 
 const Dot = styled(Box)`
   width: 6px;
@@ -100,7 +101,7 @@ const NewOrder = ({}) => {
   const { products, isLoading: isLoadingProducts } = useMedusa("products")
   const { regions } = useMedusa("regions")
 
-  const handleProductSearch = val => {
+  const handleProductSearch = (val) => {
     Medusa.variants
       .list({
         q: val,
@@ -110,9 +111,9 @@ const NewOrder = ({}) => {
       })
   }
 
-  const extractPrice = prices => {
-    const reg = regions.find(r => r.id === selectedRegion.value)
-    let price = prices.find(ma => ma.currency_code === reg.currency_code)
+  const extractPrice = (prices) => {
+    const reg = regions.find((r) => r.id === selectedRegion.value)
+    const price = prices.find((ma) => ma.currency_code === reg.currency_code)
 
     if (price) {
       return (price.amount * (1 + reg.tax_rate / 100)) / 100
@@ -121,7 +122,7 @@ const NewOrder = ({}) => {
     return 0
   }
 
-  const handleAddItemToSwap = variant => {
+  const handleAddItemToSwap = (variant) => {
     setItems([...items, { ...variant, quantity: 1 }])
   }
 
@@ -135,7 +136,7 @@ const NewOrder = ({}) => {
     setItems(updated)
   }
 
-  const handleRemoveItem = index => {
+  const handleRemoveItem = (index) => {
     const updated = [...items]
     updated.splice(index, 1)
     setItems(updated)
@@ -191,7 +192,7 @@ const NewOrder = ({}) => {
               <Select
                 width="300px"
                 name="region"
-                options={regions.map(r => ({
+                options={regions.map((r) => ({
                   value: r.id,
                   label: r.name,
                 }))}
@@ -249,7 +250,7 @@ const NewOrder = ({}) => {
                     <Box width={"20%"} px={2} py={1}>
                       <Input
                         type="number"
-                        onChange={e => handleToAddQuantity(e, index)}
+                        onChange={(e) => handleToAddQuantity(e, index)}
                         value={item.quantity || ""}
                         min={1}
                       />
@@ -276,7 +277,7 @@ const NewOrder = ({}) => {
               onSearchChange={handleProductSearch}
               searchPlaceholder={"Search by SKU, Name, etch."}
             >
-              {searchResults.map(s => (
+              {searchResults.map((s) => (
                 <Flex
                   key={s.variant_id}
                   alignItems="center"
