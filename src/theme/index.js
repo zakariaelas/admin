@@ -4,11 +4,9 @@ import breakpoints from "./breakpoints"
 import buttons from "./buttons"
 import colors from "./colors"
 import forms from "./forms"
+import shadows from "./shadows"
+import spacing from "./spacing"
 import text from "./text"
-import colors from "./colors"
-import { ThemeProvider as Provider } from "emotion-theming"
-
-import "../fonts/index.css"
 
 export const theme = {
   colors,

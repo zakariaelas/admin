@@ -77,7 +77,7 @@ export default {
   },
   notes: {
     listByResource(resourceId) {
-      let path = `/admin/notes?resource_id=${resourceId}`
+      const path = `/admin/notes?resource_id=${resourceId}`
       return medusaRequest("GET", path)
     },
     async create(resourceId, resourceType, value) {
@@ -89,11 +89,11 @@ export default {
       })
     },
     update(id, value) {
-      let path = `admin/notes/${id}`
+      const path = `admin/notes/${id}`
       return medusaRequest("POST", path, { value })
     },
     delete(id) {
-      let path = `admin/notes/${id}`
+      const path = `admin/notes/${id}`
       return medusaRequest("DELETE", path)
     },
   },
@@ -659,16 +659,68 @@ export default {
 
     list(search = {}) {
       const params = Object.keys(search)
-        .map(k => {
+        .map((k) => {
           if (search[k] === "" || search[k] === null) {
             return null
           }
           return `${k}=${search[k]}`
         })
-        .filter(s => !!s)
+        .filter((s) => !!s)
         .join("&")
-      let path = `/admin/draft-orders${params && `?${params}`}`
+      const path = `/admin/draft-orders${params && `?${params}`}`
       return medusaRequest("GET", path)
+    },
+  },
+  invites: {
+    create(data) {
+      const path = `/admin/invites`
+      return medusaRequest("POST", path, data)
+    },
+    resend(inviteId) {
+      const path = `/admin/invites/${inviteId}/resend`
+      return medusaRequest("POST", path)
+    },
+    delete(inviteId) {
+      const path = `/admin/invites/${inviteId}`
+      return medusaRequest("DELETE", path)
+    },
+    list() {
+      const path = `/admin/invites`
+      return medusaRequest("GET", path)
+    },
+    accept(data) {
+      const path = `/admin/invites/accept`
+      return medusaRequest("POST", path, data)
+    },
+  },
+  users: {
+    resetPasswordToken(data) {
+      const path = `/admin/users/password-token`
+      return medusaRequest("POST", path, data)
+    },
+    resetPassword(data) {
+      const path = `/admin/users/reset-password`
+      return medusaRequest("POST", path, data)
+    },
+
+    list() {
+      const path = `/admin/users`
+      return medusaRequest("GET", path)
+    },
+
+    retrieve(userId) {
+      const path = `/admin/users/${userId}`
+      return medusaRequest("GET", path)
+    },
+
+    update(userId, data) {
+      const path = `/admin/users/${userId}`
+      return medusaRequest("POST", path, data)
+    },
+
+    delete(userId) {
+      const path = `/admin/users/${userId}`
+      return medusaRequest("DELETE", path)
     },
   },
 }

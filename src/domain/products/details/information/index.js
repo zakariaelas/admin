@@ -12,9 +12,9 @@ import Button from "../../../../components/button"
 import Card from "../../../../components/card"
 import Divider from "../../../../components/divider"
 import InfoTooltip from "../../../../components/info-tooltip"
-import Input from "../../../../components/input"
+import Input from "../../../../components/molecules/input"
+import TagInput from "../../../../components/molecules/tag-input"
 import Spinner from "../../../../components/spinner"
-import TagInput from "../../../../components/tag-input"
 import TextArea from "../../../../components/textarea"
 import Tooltip from "../../../../components/tooltip"
 import useMedusa from "../../../../hooks/use-medusa"
@@ -165,7 +165,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
         }
 
         if (product.tags) {
-          const productTags = product.tags.map(tag => tag.value)
+          const productTags = product.tags.map((tag) => tag.value)
 
           setTags(productTags)
         }
@@ -190,7 +190,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
     },
   ]
 
-  const onImageChange = images => {
+  const onImageChange = (images) => {
     Medusa.uploads.create(images).then(({ data }) => {
       const uploaded = data.uploads.map(({ url }) => url)
       setThumbnail(uploaded[0])
@@ -283,7 +283,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
     <Card
       as="form"
       onSubmit={handleSubmit(handleOnSubmit)}
-      onKeyDown={e => e.key === "Enter" && e.preventDefault()}
+      onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       mb={2}
     >
       <Card.Header
@@ -337,7 +337,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                 placeholder="Select collection..."
                 onChange={handleCollectionChange}
                 options={
-                  collections?.map(col => ({
+                  collections?.map((col) => ({
                     value: col.id,
                     label: col.title,
                   })) || []
@@ -382,7 +382,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                 <TagInput
                   placeholder="Spring, summer..."
                   values={tags || []}
-                  onChange={values => handleTagChange(values)}
+                  onChange={(values) => handleTagChange(values)}
                   boldLabel={"true"}
                   withTooltip
                   tooltipText="Subtitle of the product"
@@ -393,7 +393,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                       Frequently used tags:{" "}
                     </Text>
                     <Text fontSize="10px">
-                      {frequentTags.map(t => t.value).join(", ")}
+                      {frequentTags.map((t) => t.value).join(", ")}
                     </Text>
                   </Flex>
                 ) : null}
@@ -411,7 +411,7 @@ const Information = ({ isLoading, product, onSubmit, onDelete }) => {
                   onChange={handleTypeChange}
                   isClearable={true}
                   options={
-                    types?.map(typ => ({
+                    types?.map((typ) => ({
                       value: typ.value,
                       label: typ.value,
                     })) || []

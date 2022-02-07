@@ -14,7 +14,8 @@ import Orders from "../domain/orders"
 import DraftOrders from "../domain/orders/draft-orders"
 import Returns from "../domain/orders/returns"
 import Swaps from "../domain/orders/swaps"
-import DraftOrders from "../domain/orders/draft-orders"
+import Products from "../domain/products"
+import Settings from "../domain/settings"
 
 const IndexPage = () => {
   useHotkeys("g + o", () => navigate("/a/orders"))
