@@ -97,7 +97,7 @@ const CollectionsTable: React.FC = () => {
   }, [collections])
 
   return (
-    <div className="w-full h-full overflow-y-scroll">
+    <div className="w-full h-full overflow-y-auto">
       <Table
         enableSearch
         handleSearch={handleSearch}
@@ -138,7 +138,7 @@ const CollectionsTable: React.FC = () => {
         offset={offset}
         pageSize={offset + rows.length}
         title="Collections"
-        currentPage={pageIndex}
+        currentPage={pageIndex + 1}
         pageCount={pageCount}
         nextPage={handleNext}
         prevPage={handlePrev}
